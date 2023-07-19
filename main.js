@@ -1,49 +1,69 @@
 let renderer = new Renderer();
-let apiManager = new APIManager();
+// let apiManager = new APIManager();
 let dataManager = new DataManager();
 
 
-const refresh = function() {
-    apiManager.getRandomUser().then((data) => {
-        dataManager.setUserAndFriends(data);
-        renderer.renderUser(dataManager);
-        renderer.renderFriends(dataManager);
-    });
+const refreshUserAndFriends = async function() {
+    await dataManager.setRandomUserAndFriendsFromApi();
+    renderer.renderUser(dataManager);
+    renderer.renderFriends(dataManager);
+}
 
-    apiManager.getRandomKanyeWestQuotation().then((data) => {
-        dataManager.setQuotation(data);
-        renderer.renderKanyeWestQuotation(dataManager);
-    });
+const refreshRandomKanyeWestQuotation = async function() {
+    await dataManager.setRandomKanyeWestQuotationFromApi();
+    renderer.renderKanyeWestQuotation(dataManager);    
+} 
 
-    apiManager.getAllPokemons()
-        .then(pokemons => apiManager.getRandomPokemon(pokemons)
-        .then(data => {
-            dataManager.setPokemon(data);
-            renderer.renderPokemon(dataManager)
-        }));
-        
-    apiManager.getMeatText().then((data) => {
-        dataManager.setMeatText(data);
-        renderer.renderMeatText(dataManager);
-    });
-    
-    // apis
-    // generation
+const refreshPokemons = async function() {
+    await dataManager.setPokemonFromApi();
+    renderer.renderPokemon(dataManager);    
+} 
 
+const refreshMeat = async function() {
+    await dataManager.setMeatTextFromApi();
+    renderer.renderMeatText(dataManager);    
+} 
+
+const refreshAll = function() {
+    refreshUserAndFriends();
+    refreshRandomKanyeWestQuotation();
+    refreshPokemons();
+    refreshMeat();
 }
 
 $("#generate-btn").on("click", function() {
-    refresh();
+    refreshAll();
 })
 
 $("#save-btn").on("click", function() {
     dataManager.saveToLocalStorage();
-    alert("Current user saved to local storage");
+    renderer.renderUser(dataManager);
+    console.log(localStorage["users"]);
 })
 
-$("#load-btn").on("click", function() {
-    dataManager.getFromLocalStorage();
+$(document).click(function(){
+    $(".load-saved").hide();
+  });
+  
+
+$("#load-btn").on("click", function(ev) {
+    renderer.renderLoadSaved(dataManager.getUserNamesFromLocalStorage());
+    ev.stopPropagation();
+    console.log(localStorage["users"]);
+})
+
+$(".load-saved-container").on("click", "li", function (ev) {
+    const index = $(this).index();
+    dataManager.loadUserFromLocalStorage(index);
+    renderer.renderLoadSaved(null, false);
     renderer.renderAll(dataManager);
+    ev.stopPropagation();
+    console.log(localStorage["users"]);
 })
 
-refresh();
+$("#clear-btn").on("click", function() {
+    dataManager.clearLocalStorage();
+    renderer.renderUser(dataManager);
+})
+
+refreshAll();

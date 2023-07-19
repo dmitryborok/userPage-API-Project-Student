@@ -14,50 +14,52 @@
 
 <body>
     <div class="container">
-        <div class="user-container">
-            <script id="user-template" type="text/x-handlebars-template">
-                <img id="profile-pic" src="{{picture.thumbnail}}">
-                <div class="user-info">
-                    <p>{{name.first}} {{name.last}}</p>
-                    <p>{{location.city}}, {{location.country}}</p>
-                </div>
-            </script>	
-        </div>
+        <script id="user-template" type="text/x-handlebars-template">
+            <img id="profile-pic" src="{{picture.thumbnail}}">
+            <div class="user-info">
+                <p>{{name.first}} {{name.last}}</p>
+                <p>{{location.city}}, {{location.country}}</p>
+            </div>
+        </script>
+        <script id="multiple-users-template" type="text/x-handlebars-template">
+            <ul>	
+                {{#each users}}
+                    <li>{{name.first}} {{name.last}}</li>
+                {{/each}}
+            </ul>	
+        </script>
+        <script id="pokemon-template" type="text/x-handlebars-template">
+            <img id="pokemon-image" src="{{pokeImg}}">
+            <div id="pokemon-text">Favourite Pokemon: {{sentenceCase pokeName}}</div>
+        </script> 
+        <div class="user-container"></div>
         <div class="quote-container">Favourite Quote
             <p id="quote-text"></p>
             <p id="quote-author"></p>
         </div>	
         <div class="content-container">	
-            <div id="pokemon-container">
-                <script id="pokemon-template" type="text/x-handlebars-template">
-                    <img id="pokemon-image" src="{{pokeImg}}">
-                    <div id="pokemon-text">Favourite Pokemon: {{sentenceCase pokeName}}</div>
-                </script> 
-            </div>	
-            <div id="meat-container"></div>	
+            <div class="pokemon-container"></div>	
+            <div class="meat-container"></div>	
         </div>	
         <div class="friends">	
             <h4>Friends</h4>	
             <div class="friends-container">
-                <script id="friends-template" type="text/x-handlebars-template">
-                    <ul>	
-                        {{#each friends}}
-                            <li>{{name.first}} {{name.last}}</li>
-                        {{/each}}
-                    </ul>	
-                </script>
             </div>	
         </div>	
         <div class="buttons">	
             <button id="generate-btn">Generate Random User</button>	
             <button id="save-btn">Save User Page</button>	
-            <button id="load-btn">Load User Page</button>	
+            <button id="load-btn">Load User Page</button>
+            <button id="clear-btn">Clear Saved Users</button>
+            <div class="load-saved">	
+                <h4>Load Saved Users</h4>	
+                <div class="load-saved-container"></div>	
+            </div>	
         </div>	
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.js"></script>
     <script src="DataManager.js"></script>
-    <script src="APIManager.js"></script>
     <script src="Renderer.js"></script>
     <script src="main.js"></script>
 </body>
