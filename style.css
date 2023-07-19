@@ -13,13 +13,13 @@ body {
     height: 100vh;
     display: grid;
     grid-template-columns: 3fr 2fr 1fr;
-    grid-template-rows: 1fr 1fr 3fr;
+    grid-template-rows: 2fr 1fr 6fr;
 }
 
 .user-container {
     align-self: start;
     grid-row: 1;
-    grid-column: 1;
+    grid-column: 1 / 3;
     font-size: 25px;
     background-color: #3498db;
     padding: 1vmax;
@@ -45,16 +45,16 @@ body {
 .quote-container {
     grid-row: 2;
     grid-column: 1 / 3;
-    font-size: 1.5vmax;
+    font-size: 2vmax;
     text-align: left;
     color: #2c3e50;
     padding: 1vmax;
-    font-family: 'Indie Flower', cursive;
+    font-family: 'Nunito', sans-serif;
 }
 
-.quote-container>p {
-    font-family: 'Nunito', sans-serif;
-    font-size: 1vmax;
+.quote-container p {
+    font-size: 1.5vmax;
+    font-family: 'Indie Flower', cursive;
 }
 
 .content-container {
@@ -77,11 +77,13 @@ body {
 }
 
 ul {
-    list-style-type: none;
+    list-style: inside;
 }
 
 .buttons {
+    /* position: relative; */
     position: fixed;
+
     bottom: 1vw;
     left: 1vw;
 }
@@ -112,17 +114,18 @@ button {
     vertical-align: middle;
 }
 
-.pokemon-container {
+#pokemon-container {
     font-size: 20px;
     padding: 1vw;
     display: grid;
-    grid-template-columns: minmax(150px, 150px) minmax(200px, 400px);
+    grid-template-columns: minmax(50px, 150px) minmax(200px, 400px);
     align-items: center;
     justify-self: baseline;
     border-bottom: 1px solid #2c3e50;
 }
 
-.meat-text {
+#meat-text {
     padding: 1vw;
     font-size: 1vmax;
+    margin-bottom: 50px;
 }

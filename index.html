@@ -3,32 +3,63 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>API Project</title>
+    <title>Random User Page Generator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Indie+Flower&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
-
 </head>
 
 <body>
-    <div class="container">	
-        <div class="user-container"></div>	
-        <div class="quote-container"></div>	
+    <div class="container">
+        <div class="user-container">
+            <script id="user-template" type="text/x-handlebars-template">
+                <img id="profile-pic" src="{{picture.thumbnail}}">
+                <div class="user-info">
+                    <p>{{name.first}} {{name.last}}</p>
+                    <p>{{location.city}}, {{location.country}}</p>
+                </div>
+            </script>	
+        </div>
+        <div class="quote-container">Favourite Quote
+            <p id="quote-text"></p>
+            <p id="quote-author"></p>
+        </div>	
         <div class="content-container">	
-            <div class="pokemon-container"></div>	
-            <div class="meat-container"></div>	
+            <div id="pokemon-container">
+                <script id="pokemon-template" type="text/x-handlebars-template">
+                    <img id="pokemon-image" src="{{pokeImg}}">
+                    <div id="pokemon-text">Favourite Pokemon: {{sentenceCase pokeName}}</div>
+                </script> 
+            </div>	
+            <div id="meat-container"></div>	
         </div>	
         <div class="friends">	
             <h4>Friends</h4>	
-            <div class="friends-container">	
+            <div class="friends-container">
+                <script id="friends-template" type="text/x-handlebars-template">
+                    <ul>	
+                        {{#each friends}}
+                            <li>{{name.first}} {{name.last}}</li>
+                        {{/each}}
+                    </ul>	
+                </script>
             </div>	
         </div>	
         <div class="buttons">	
-            <button>Load User Data</button>	
-            <button>Display User</button>	
+            <button id="generate-btn">Generate Random User</button>	
+            <button id="save-btn">Save User Page</button>	
+            <button id="load-btn">Load User Page</button>	
         </div>	
     </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.0.11/handlebars.js"></script>
+    <script src="DataManager.js"></script>
+    <script src="APIManager.js"></script>
+    <script src="Renderer.js"></script>
+    <script src="main.js"></script>
 </body>
 
 </html>
