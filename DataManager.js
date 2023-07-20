@@ -5,7 +5,9 @@ class DataManager {
     static urlKanyeWestQuotation = "https://api.kanye.rest";
     static urlPokemon = "https://pokeapi.co/api/v2/pokemon";
     static urlEndpointPokemonAll = "?limit=100000&offset=0";
-    static urlMeat = "https://baconipsum.com/api/?type=meat-and-filler&paras=3";
+    static urlMeat = "https://baconipsum.com/api/?type=meat-and-filler&paras=1";
+    static queryHeroku = "https://random-word-api.herokuapp.com/word";
+    static myApiKeyHeroku = "aoAgVNwWXZshSsdfrOy2a0sW89UdNCZK";
 
     constructor() {
         this._user = {};
@@ -14,6 +16,7 @@ class DataManager {
         this._meatText = "";
         this._pokemon = {};
         this._isSaved = false;
+        this._gif = "";
     }
 
 
@@ -76,17 +79,8 @@ class DataManager {
         return this._pokemon;
     }
 
-    setQuotation(dataFromApi) {
-        this._quotation = dataFromApi.quote;
-    }
-
-    setMeatText(dataFromApi) {
-        this._meatText = dataFromApi.join();
-    }
-
-    setPokemon(dataFromApi) {
-        this._pokemon.pokeName = dataFromApi.name; 
-        this._pokemon.pokeImg = dataFromApi.sprites.front_default; 
+    get gif() {
+        return this._gif;
     }
 
     saveToLocalStorage() {
@@ -107,7 +101,8 @@ class DataManager {
         if ((usersJSON === 'undefined') || (usersJSON === null)) { 
             return [];
         } else {
-            return JSON.parse(localStorage.getItem("users"));
+            const users = JSON.parse(localStorage.getItem("users")); 
+            return users.map(item => (item._user));
         }
     }
     
@@ -135,7 +130,7 @@ class DataManager {
         this._isSaved = false;
     }
 
-    getApi(url) {
+    static getApi(url) {
         return new Promise((resolve, reject) => 
             $.ajax({method: "GET", 
                     url: url,
@@ -145,7 +140,7 @@ class DataManager {
     }
     
     async setRandomUserAndFriendsFromApi() {
-        const userData = await this.getApi(DataManager.urlUser);
+        const userData = await DataManager.getApi(DataManager.urlUser);
         const firstUser = userData.results[0];
         this._user = {name: {
                         first: firstUser.name.first,
@@ -162,29 +157,40 @@ class DataManager {
         this._isSaved = false;
     }
 
-    randomPokemonName(pokemons) {
+    static randomPokemonName(pokemons) {
         const pokemonNo = Math.floor(Math.random()*pokemons.count);
         return pokemons.results[pokemonNo].name;
     } 
 
     async setPokemonFromApi () {
-        const pokemons = await this.getApi(DataManager.urlPokemon + DataManager.urlEndpointPokemonAll);
-        const pokemon = await this.getApi(DataManager.urlPokemon + "/" + this.randomPokemonName(pokemons));
+        const pokemons = await DataManager.getApi(DataManager.urlPokemon + DataManager.urlEndpointPokemonAll);
+        const pokemon = await DataManager.getApi(DataManager.urlPokemon + "/" + DataManager.randomPokemonName(pokemons));
+        const arrPokemonGif = await DataManager.getApi(DataManager.queryGiphy(pokemon.name));
         this._pokemon.pokeName = pokemon.name; 
         this._pokemon.pokeImg = pokemon.sprites.front_default; 
+        if (arrPokemonGif.data.length === 0) {
+            this._gif = "";
+        } else {
+            this._gif = arrPokemonGif.data[0].embed_url;
+        }
         this._isSaved = false;
     }
 
     async setRandomKanyeWestQuotationFromApi() {
-        const dataFromApi = await this.getApi(DataManager.urlKanyeWestQuotation);
+        const dataFromApi = await DataManager.getApi(DataManager.urlKanyeWestQuotation);
         this._quotation = dataFromApi.quote;
         this._isSaved = false;
     }
     
     async setMeatTextFromApi() {
-        const dataFromApi = await this.getApi(DataManager.urlMeat);
+        const dataFromApi = await DataManager.getApi(DataManager.urlMeat);
         this._meatText = dataFromApi.join();
         this._isSaved = false;
     }
+
+    static queryGiphy(word) {
+        return `https://api.giphy.com/v1/gifs/search?q=${word}&api_key=${DataManager.myApiKeyHeroku}`;
+    }
+
     
 }

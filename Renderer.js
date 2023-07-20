@@ -23,6 +23,8 @@ class Renderer {
         this.loadSavedContainer = $(".load-saved-container");
         this.loadSaved = $(".load-saved");
         this.meatContainer = $(".meat-container");
+        this.pokemonGif = $(".pokemon-gif");
+        this.pokemonGifNotFound=$(".pokemon-gif-not-found")
     };
 
 
@@ -53,6 +55,14 @@ class Renderer {
         const template = Handlebars.compile(source);
         const newHTML = template(dataManager.pokemon);
         this.pokemonContainer.empty().append(newHTML);
+        if (dataManager.gif == "") {
+            this.pokemonGifNotFound.show();
+            this.pokemonGif.hide();
+        } else {
+            this.pokemonGif.attr("src", dataManager.gif);
+            this.pokemonGifNotFound.hide();
+            this.pokemonGif.show();
+        }
     }
 
     renderMeatText(dataManager) {
@@ -79,8 +89,7 @@ class Renderer {
             this.loadSaved.children().first().html(users.length === 0 ? "No Saved Users" : "Load Saved Users");
             const source = $("#multiple-users-template").html();
             const template = Handlebars.compile(source);
-            const usersFormattedArray = users.map(item => (item._user)); // temporary solution 
-            const newHTML = template({users: usersFormattedArray});
+            const newHTML = template({users: users});
             this.loadSavedContainer.empty().append(newHTML);
             this.loadSaved.css("display", "inline-block");
         } else {

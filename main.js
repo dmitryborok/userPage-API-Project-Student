@@ -1,5 +1,4 @@
 let renderer = new Renderer();
-// let apiManager = new APIManager();
 let dataManager = new DataManager();
 
 
@@ -38,7 +37,6 @@ $("#generate-btn").on("click", function() {
 $("#save-btn").on("click", function() {
     dataManager.saveToLocalStorage();
     renderer.renderUser(dataManager);
-    console.log(localStorage["users"]);
 })
 
 $(document).click(function(){
@@ -49,7 +47,6 @@ $(document).click(function(){
 $("#load-btn").on("click", function(ev) {
     renderer.renderLoadSaved(dataManager.getUserNamesFromLocalStorage());
     ev.stopPropagation();
-    console.log(localStorage["users"]);
 })
 
 $(".load-saved-container").on("click", "li", function (ev) {
@@ -58,12 +55,13 @@ $(".load-saved-container").on("click", "li", function (ev) {
     renderer.renderLoadSaved(null, false);
     renderer.renderAll(dataManager);
     ev.stopPropagation();
-    console.log(localStorage["users"]);
 })
 
 $("#clear-btn").on("click", function() {
-    dataManager.clearLocalStorage();
-    renderer.renderUser(dataManager);
+    if (confirm("The list of saved users will be cleared. You will not be able to restore it. Proceed anyway?")) {
+        dataManager.clearLocalStorage();
+        renderer.renderUser(dataManager);
+    }
 })
 
 refreshAll();
